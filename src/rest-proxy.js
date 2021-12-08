@@ -67,7 +67,7 @@ export const RestApi = new Proxy(function(){}, {
     construct(target, args){        
         let [apiSpec, axiosInstance] = [...args];
         if(typeof(apiSpec) === 'string'){
-            apiSpec = new RestApiSpec(apiSpec, '');
+            apiSpec = new RestApiSpec(location.origin, apiSpec);
         }
         if(Array.isArray(apiSpec)){
             apiSpec = new RestApiSpec(apiSpec[0], apiSpec[1]);
