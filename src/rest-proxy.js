@@ -70,6 +70,9 @@ export const RestApi = new Proxy(function(){}, {
         if(Array.isArray(apiSpec)){
             apiSpec = new RestApiSpec(apiSpec[0], apiSpec[1]);
         }
+        if(!apiSpec){
+            apiSpec = new RestApiSpec(location.origin, 'rest');
+        }
         return new Proxy({}, new RestProxyHandler(axios, apiSpec.getRootPath(), apiSpec, {}));
     }
 });
