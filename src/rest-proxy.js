@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const verbs = ['get','post','put','delete'];
 
 export class ApiRoot{
@@ -63,7 +65,7 @@ class RestProxyHandler{
 
 export const RestApi = new Proxy(function(){}, {
     construct(target, args){        
-        let [axios, apiSpec] = [...args];
+        let [apiSpec, axiosInstance] = [...args];
         if(typeof(apiSpec) === 'string'){
             apiSpec = new RestApiSpec(apiSpec, '');
         }
@@ -73,7 +75,10 @@ export const RestApi = new Proxy(function(){}, {
         if(!apiSpec){
             apiSpec = new RestApiSpec(location.origin, 'rest');
         }
-        return new Proxy({}, new RestProxyHandler(axios, apiSpec.getRootPath(), apiSpec, {}));
+        if(!axiosInstance){
+            axiosInstance = axios;
+        }
+        return new Proxy({}, new RestProxyHandler(axiosInstance, apiSpec.getRootPath(), apiSpec, {}));
     }
 });
 
